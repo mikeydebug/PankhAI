@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Volunteer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  skills    String   // JSON string or comma separated
+  interests String   // JSON string or comma separated
+  role      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CampaignPost {
+  id        String   @id @default(cuid())
+  goal      String
+  platform  String
+  tone      String
+  language  String
+  content   String
+  hashtags  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  sessionId String   @unique
+  messages  String   // JSON array of messages
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
