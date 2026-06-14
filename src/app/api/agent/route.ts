@@ -1,10 +1,9 @@
 import { NextRequest } from 'next/server';
 import { determineIntent } from '@/lib/agents/orchestrator';
 import { AGENT_PROMPTS } from '@/lib/agents/prompts';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'dummy_key');
-const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || 'dummy_key' });
 
 export const runtime = 'edge';
 
@@ -41,28 +40,31 @@ export async function POST(req: NextRequest) {
 
           const fullSystemPrompt = `${systemPrompt}\n\n${langInstruction}`;
 
-          // Format history for Gemini
+          // Format history for Groq
           const contents = (history || []).map((msg: { role: string; content: string }) => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.content }]
+            role: msg.role === 'user' ? 'user' : 'assistant',
+            content: msg.content
           }));
 
           // Add current message
           contents.push({
             role: 'user',
-            parts: [{ text: message }]
+            content: message
           });
 
-          // 4. Stream response from Gemini
-          const chat = model.startChat({
-            history: contents.slice(0, -1),
-            systemInstruction: { role: 'system', parts: [{ text: fullSystemPrompt }] }
+          // 4. Stream response from Groq
+          const streamResponse = await groq.chat.completions.create({
+            messages: [
+              { role: 'system', content: fullSystemPrompt },
+              ...contents
+            ],
+            model: 'llama-3.3-70b-versatile',
+            temperature: 0.7,
+            stream: true,
           });
 
-          const result = await chat.sendMessageStream(message);
-
-          for await (const chunk of result.stream) {
-            const chunkText = chunk.text();
+          for await (const chunk of streamResponse) {
+            const chunkText = chunk.choices[0]?.delta?.content || "";
             if (chunkText) {
               enqueueEvent('message', chunkText);
             }
@@ -76,7 +78,7 @@ export async function POST(req: NextRequest) {
           const err = error as { status?: number, message?: string };
           const isRateLimit = err?.status === 429 || err?.message?.includes('429');
           const errorMessage = isRateLimit 
-            ? "⚠️ Gemini API rate limit exceeded. Please wait a moment and try again."
+            ? "⚠️ Groq API rate limit exceeded. Please wait a moment and try again."
             : "⚠️ Sorry, I am facing some technical difficulties. Please try again.";
           enqueueEvent('error', errorMessage);
           controller.close();

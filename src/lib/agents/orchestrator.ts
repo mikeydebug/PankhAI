@@ -1,8 +1,7 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 import { AgentId } from './prompts';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'dummy_key');
-const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || 'dummy_key' });
 
 export async function determineIntent(message: string): Promise<AgentId> {
   const prompt = `
@@ -21,8 +20,13 @@ User Message: "${message}"
 `;
 
   try {
-    const result = await model.generateContent(prompt);
-    const text = result.response.text().trim().toLowerCase();
+    const completion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0,
+    });
+    
+    const text = (completion.choices[0]?.message?.content || "").trim().toLowerCase();
     
     const validAgents: AgentId[] = ['disha', 'saathi', 'awaaz', 'aasha', 'udaan', 'nazariya'];
     if (validAgents.includes(text as AgentId)) {
