@@ -5,12 +5,12 @@ import { AgentId } from '@/lib/agents/prompts';
 import { MessageSquare, Users, Heart, HandHeart, Calendar, TrendingUp } from 'lucide-react';
 
 const AGENT_NODES: Record<AgentId, { icon: React.ElementType; label: string; color: string; pos: { x: number; y: number } }> = {
-  disha: { icon: MessageSquare, label: 'Disha', color: '#4F46E5', pos: { x: 50, y: 15 } }, // Center top
-  saathi: { icon: Users, label: 'Saathi', color: '#0D9488', pos: { x: 15, y: 50 } },
-  awaaz: { icon: Heart, label: 'Awaaz', color: '#EA580C', pos: { x: 85, y: 50 } },
-  aasha: { icon: HandHeart, label: 'Aasha', color: '#E11D48', pos: { x: 30, y: 85 } },
-  udaan: { icon: Calendar, label: 'Udaan', color: '#0284C7', pos: { x: 70, y: 85 } },
-  nazariya: { icon: TrendingUp, label: 'Nazariya', color: '#D97706', pos: { x: 50, y: 50 } }, // Center middle
+  disha: { icon: MessageSquare, label: 'Disha', color: '#4F46E5', pos: { x: 50, y: 15 } },
+  saathi: { icon: Users, label: 'Saathi', color: '#0D9488', pos: { x: 20, y: 40 } },
+  awaaz: { icon: Heart, label: 'Awaaz', color: '#EA580C', pos: { x: 80, y: 40 } },
+  aasha: { icon: HandHeart, label: 'Aasha', color: '#E11D48', pos: { x: 25, y: 75 } },
+  udaan: { icon: Calendar, label: 'Udaan', color: '#0284C7', pos: { x: 75, y: 75 } },
+  nazariya: { icon: TrendingUp, label: 'Nazariya', color: '#D97706', pos: { x: 50, y: 55 } },
 };
 
 interface Props {

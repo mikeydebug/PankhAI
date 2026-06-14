@@ -73,7 +73,12 @@ export async function POST(req: NextRequest) {
           controller.close();
         } catch (error) {
           console.error("Agent Stream Error:", error);
-          enqueueEvent('error', "Sorry, I am facing some technical difficulties. Please try again.");
+          const err = error as { status?: number, message?: string };
+          const isRateLimit = err?.status === 429 || err?.message?.includes('429');
+          const errorMessage = isRateLimit 
+            ? "⚠️ Gemini API rate limit exceeded. Please wait a moment and try again."
+            : "⚠️ Sorry, I am facing some technical difficulties. Please try again.";
+          enqueueEvent('error', errorMessage);
           controller.close();
         }
       }

@@ -90,7 +90,12 @@ export default function ChatPage() {
                 setMessages(prev => prev.map(msg => 
                   msg.id === currentAgentMessageId ? { ...msg, content: msg.content + data } : msg
                 ));
-              } else if (eventType === 'done' || eventType === 'error') {
+              } else if (eventType === 'error') {
+                setMessages(prev => prev.map(msg => 
+                  msg.id === currentAgentMessageId ? { ...msg, content: data } : msg
+                ));
+                setIsLoading(false);
+              } else if (eventType === 'done') {
                 setIsLoading(false);
               }
             } catch (e) {
@@ -117,13 +122,19 @@ export default function ChatPage() {
   ];
 
   return (
-    <div className="flex-1 flex flex-col lg:flex-row h-full max-h-[calc(100vh-4rem)] bg-white dark:bg-slate-900">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-4rem)] bg-white dark:bg-slate-900 overflow-hidden relative">
       
+      {/* Agent Network Sidebar */}
+      <div className="hidden lg:block w-80 h-full border-r border-gray-200 dark:border-slate-800 bg-gray-50/50 dark:bg-slate-900/50 backdrop-blur-xl p-4 flex-shrink-0 z-10">
+        <div className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">Agent Network</div>
+        <AgentNetworkPanel activeAgent={activeAgent} />
+      </div>
+
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col h-full border-r border-gray-200 dark:border-slate-800 relative">
+      <div className="flex-1 flex flex-col h-full relative">
         
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth pb-32">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
               <div className="relative mb-8">
@@ -172,37 +183,31 @@ export default function ChatPage() {
                   </motion.div>
                 ))}
               </AnimatePresence>
-              <div ref={messagesEndRef} />
+              <div ref={messagesEndRef} className="h-4" />
             </div>
           )}
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-white dark:bg-slate-900 border-t border-gray-200 dark:border-slate-800">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto relative flex items-center">
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-white via-white to-transparent dark:from-slate-900 dark:via-slate-900 dark:to-transparent pt-10">
+          <form onSubmit={handleSubmit} className="max-w-3xl mx-auto relative flex items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl border border-gray-200 dark:border-slate-700 rounded-full shadow-lg">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={translations.chat.placeholder}
-              className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full py-4 pl-6 pr-16 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white shadow-inner transition-all"
+              className="w-full bg-transparent py-4 pl-6 pr-16 focus:outline-none text-gray-900 dark:text-white"
             />
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
-              className="absolute right-2 p-2 bg-primary text-white rounded-full hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="absolute right-2 p-3 bg-primary text-white rounded-full hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:scale-105 active:scale-95 shadow-md shadow-primary/30"
             >
               <Send className="w-5 h-5" />
             </button>
           </form>
         </div>
       </div>
-
-      {/* Agent Network Sidebar */}
-      <div className="lg:w-96 w-full h-80 lg:h-full p-4 bg-gray-50 dark:bg-slate-900/50">
-        <AgentNetworkPanel activeAgent={activeAgent} />
-      </div>
-      
     </div>
   );
 }
