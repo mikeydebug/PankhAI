@@ -33,10 +33,10 @@ export default function Home() {
             </span>
             {translations.stats.status}
           </div>
-          <h1 className="text-5xl md:text-7xl font-display font-bold text-gray-900 dark:text-white leading-tight mb-6 max-w-4xl">
+          <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight mb-6 max-w-4xl bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 drop-shadow-sm">
             {translations.hero.title}
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10">
+          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10 font-medium">
             {translations.hero.subtitle}
           </p>
           
@@ -63,7 +63,7 @@ export default function Home() {
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-display font-bold text-accent"
+            className="text-4xl md:text-6xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent to-yellow-300 drop-shadow-lg"
           >
             {translations.stats.peopleHelped}
           </motion.h2>

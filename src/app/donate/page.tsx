@@ -40,11 +40,11 @@ export default function DonationCalculator() {
           const { value, done } = await reader.read();
           if (done) break;
           const text = decoder.decode(value);
-          const lines = text.split('\\n\\n');
+          const lines = text.split('\n\n');
           for (const line of lines) {
             if (line.startsWith('event: message')) {
               try {
-                const data = JSON.parse(line.split('\\n')[1].replace('data: ', ''));
+                const data = JSON.parse(line.split('\n')[1].replace('data: ', ''));
                 completeResponse += data;
                 setAiResponse(completeResponse);
               } catch {}

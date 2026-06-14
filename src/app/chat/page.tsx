@@ -67,13 +67,13 @@ export default function ChatPage() {
         
         buffer += decoder.decode(value, { stream: true });
         
-        const lines = buffer.split('\\n\\n');
+        const lines = buffer.split('\n\n');
         buffer = lines.pop() || ''; // Keep the last incomplete chunk in buffer
 
         for (const line of lines) {
           if (line.startsWith('event: ')) {
-            const eventType = line.split('\\n')[0].replace('event: ', '');
-            const dataStr = line.split('\\n')[1]?.replace('data: ', '');
+            const eventType = line.split('\n')[0].replace('event: ', '');
+            const dataStr = line.split('\n')[1]?.replace('data: ', '');
             
             if (!dataStr) continue;
             
@@ -126,19 +126,22 @@ export default function ChatPage() {
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
           {messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-center px-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-                <Bot className="w-8 h-8 text-primary" />
+              <div className="relative mb-8">
+                <div className="absolute inset-0 bg-primary/20 rounded-full blur-xl animate-pulse" />
+                <div className="w-20 h-20 bg-gradient-to-br from-primary to-blue-600 rounded-full flex items-center justify-center relative shadow-lg shadow-primary/30">
+                  <Bot className="w-10 h-10 text-white" />
+                </div>
               </div>
-              <h2 className="text-2xl font-display font-bold mb-2">Welcome to the Pankh Squad</h2>
-              <p className="text-gray-500 max-w-md mb-8">
+              <h2 className="text-3xl font-display font-bold mb-3 text-gray-900 dark:text-white drop-shadow-sm">Welcome to the Pankh Squad</h2>
+              <p className="text-gray-600 dark:text-gray-300 max-w-md mb-10 text-lg">
                 How can we help you create an impact today? Ask a question, plan an event, or get campaign ideas.
               </p>
-              <div className="flex flex-wrap justify-center gap-2 max-w-2xl">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full">
                 {chips.map(chip => (
                   <button
                     key={chip}
                     onClick={() => { setInput(chip); }}
-                    className="bg-gray-100 hover:bg-gray-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-sm py-2 px-4 rounded-full transition-colors"
+                    className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md hover:bg-white dark:hover:bg-slate-700 border border-gray-200 dark:border-slate-700 text-sm py-3 px-6 rounded-xl transition-all shadow-sm hover:shadow-md text-gray-800 dark:text-gray-200"
                   >
                     {chip}
                   </button>
@@ -182,7 +185,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={translations.chat.placeholder}
-              className="w-full bg-gray-100 dark:bg-slate-800 border-none rounded-full py-4 pl-6 pr-16 focus:outline-none focus:ring-2 focus:ring-primary/50 text-gray-900 dark:text-white"
+              className="w-full bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-full py-4 pl-6 pr-16 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900 dark:text-white shadow-inner transition-all"
             />
             <button
               type="submit"

@@ -4,13 +4,15 @@
 
 @layer base {
   :root {
-    --background: 253 251 247; /* #FDFBF7 */
-    --foreground: 31 41 55; /* #1f2937 */
+    --background: #FDFBF7;
+    --foreground: #1f2937;
+    --border: #E5E7EB;
   }
 
   .dark {
-    --background: 15 23 42; /* #0F172A */
-    --foreground: 248 250 252; /* #F8FAFC */
+    --background: #0F172A;
+    --foreground: #F8FAFC;
+    --border: #334155;
   }
 
   body {

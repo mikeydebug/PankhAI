@@ -16,7 +16,7 @@ export default function EventPlanner() {
   const componentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
     documentTitle: 'NayePankh_Event_Plan',
   });
 
@@ -49,11 +49,11 @@ export default function EventPlanner() {
           const { value, done } = await reader.read();
           if (done) break;
           const text = decoder.decode(value);
-          const lines = text.split('\\n\\n');
+          const lines = text.split('\n\n');
           for (const line of lines) {
             if (line.startsWith('event: message')) {
               try {
-                const data = JSON.parse(line.split('\\n')[1].replace('data: ', ''));
+                const data = JSON.parse(line.split('\n')[1].replace('data: ', ''));
                 completeResponse += data;
                 setPlan(completeResponse);
               } catch {}
@@ -151,7 +151,7 @@ export default function EventPlanner() {
               </div>
               
               <div className="prose prose-sky dark:prose-invert max-w-none print:text-black">
-                {plan.split('\\n').map((line, i) => {
+                {plan.split('\n').map((line, i) => {
                   if (line.startsWith('### ')) return <h3 key={i} className="text-xl font-bold mt-6 mb-3">{line.replace('### ', '')}</h3>;
                   if (line.startsWith('## ')) return <h2 key={i} className="text-2xl font-bold mt-8 mb-4 border-b pb-2">{line.replace('## ', '')}</h2>;
                   if (line.startsWith('# ')) return <h1 key={i} className="text-3xl font-bold mt-4 mb-6">{line.replace('# ', '')}</h1>;

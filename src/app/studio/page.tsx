@@ -45,10 +45,10 @@ export default function CampaignStudio() {
           const { value, done } = await reader.read();
           if (done) break;
           const text = decoder.decode(value);
-          const lines = text.split('\\n\\n');
+          const lines = text.split('\n\n');
           for (const line of lines) {
             if (line.startsWith('event: message')) {
-              const dataStr = line.split('\\n')[1].replace('data: ', '');
+              const dataStr = line.split('\n')[1].replace('data: ', '');
               try {
                 const data = JSON.parse(dataStr);
                 completeResponse += data;

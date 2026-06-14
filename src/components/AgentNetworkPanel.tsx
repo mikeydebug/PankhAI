@@ -63,8 +63,9 @@ export function AgentNetworkPanel({ activeAgent }: Props) {
                 left: `${node.pos.x}%`,
                 top: `${node.pos.y}%`,
                 color: node.color,
-                ringColor: node.color
-              }}
+                borderColor: node.color,
+                '--tw-ring-color': node.color
+              } as React.CSSProperties}
               animate={{ scale: isActive ? 1.2 : 1 }}
             >
               <node.icon className="w-6 h-6" />

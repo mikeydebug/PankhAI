@@ -56,10 +56,10 @@ export default function VolunteerOnboarding() {
           const { value, done } = await reader.read();
           if (done) break;
           const text = decoder.decode(value);
-          const lines = text.split('\\n\\n');
+          const lines = text.split('\n\n');
           for (const line of lines) {
             if (line.startsWith('event: message')) {
-              const data = JSON.parse(line.split('\\n')[1].replace('data: ', ''));
+              const data = JSON.parse(line.split('\n')[1].replace('data: ', ''));
               completeResponse += data;
               setAiResponse(completeResponse);
             }
@@ -99,11 +99,15 @@ export default function VolunteerOnboarding() {
   };
 
   return (
-    <div className="flex-1 min-h-full py-12 px-4 bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center">
-      <div className="max-w-2xl w-full bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-gray-100 dark:border-slate-700 overflow-hidden">
+    <div className="flex-1 min-h-[calc(100vh-4rem)] py-12 px-4 bg-gray-50 dark:bg-slate-900 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-teal-500/20 rounded-full blur-3xl" />
+
+      <div className="max-w-4xl w-full bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl shadow-xl border border-gray-200 dark:border-slate-700 overflow-hidden relative z-10">
         
         {/* Header */}
-        <div className="bg-primary px-8 py-6 text-white flex items-center gap-4">
+        <div className="bg-gradient-to-r from-primary to-blue-800 px-10 py-8 text-white flex flex-col md:flex-row items-start md:items-center gap-6">
           <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
             <Users className="w-6 h-6 text-white" />
           </div>

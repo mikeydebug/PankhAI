@@ -18,9 +18,9 @@ const config: Config = {
           DEFAULT: "#F59E0B", // Amber
           foreground: "#ffffff",
         },
-        background: "#FDFBF7", // Soft cream
-        foreground: "#1f2937",
-        border: "#E5E7EB",
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        border: "var(--border)",
       },
       fontFamily: {
         sans: ["var(--font-inter)", "sans-serif"],
